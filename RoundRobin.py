@@ -24,9 +24,9 @@ def read_file():
 def RoundRobin(quantum, p_time, p_action, p_pid):
     print('Vamos a hacer RoundRobin')
 
-def PriorityNotPreentive(quantum, p_time, p_action, p_pid, p_prio):
+def PriorityNotPreentive(p_time, p_action, p_pid, p_prio):
     print('Vamos a hacer Priority Not Preentive')
 
 read_file()
 if scheduling == 'RR': RoundRobin(quantum, p_time, p_action, p_pid)
-if scheduling == 'prioNotPreentive': PriorityNotPreentive(quantum, p_time, p_action, p_pid, p_prio)
+if scheduling == 'prioNotPreentive': PriorityNotPreentive(p_time, p_action, p_pid, p_prio)
