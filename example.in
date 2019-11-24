@@ -1,15 +1,15 @@
 RR
 QUANTUM 1000
-0 Llega  A 
+0 Llega A
 1 Llega B
-2  Llega C 
+2 Llega C
 2001 Llega D
-3001 Acaba C     
-3002 Llega E 
-3003 Llega F 
-5001 Llega G 
+3001 Acaba C
+3002 Llega E
+3003 Llega F
+5001 Llega G
 5500 Acaba D
-5501  startI/O E
+5501 startI/O E
 5800 Acaba F
 5900 endI/O E
 5901 Acaba A
