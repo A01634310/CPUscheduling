@@ -1,5 +1,22 @@
 from tabulate import tabulate
 
+class Queue:
+    def __init__(self):
+        self.items = []
+
+    def isEmpty(self):
+        return self.items == []
+
+    def enqueue(self, item):
+        self.items.insert(0,item)
+
+    def dequeue(self):
+        return self.items.pop()
+
+    def size(self):
+        return len(self.items)
+
+
 scheduling = ''
 quantum = ''
 p_time = []
@@ -22,7 +39,13 @@ def read_file():
             next_line = f.readline().strip()
 
 def RoundRobin(quantum, p_time, p_action, p_pid):
-    print('Vamos a hacer RoundRobin')
+    q=Queue()
+    for i in range(len(p_time)):
+        print(p_time[i])
+
+
+    print('se acabo el proceso')
+    
 
 def PriorityNotPreentive(p_time, p_action, p_pid, p_prio):
     print('Vamos a hacer Priority Not Preentive')
