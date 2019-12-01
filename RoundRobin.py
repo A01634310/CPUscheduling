@@ -16,40 +16,40 @@ class Queue:
     def size(self):
         return len(self.items)
 
-
 scheduling = ''
 quantum = ''
-p_time = []
-p_action = []
-p_pid = []
-p_prio = []
 
 def read_file():
-    global scheduling, quantum, p_time, p_action, p_pid, p_prio
+    eventos = []
     with open('example.in', 'r') as f:
+        global scheduling
+        global quantum
         scheduling = f.readline().split(None, 1)[0].strip()
         quantum = f.readline().split()[1].strip()
         next_line = f.readline().strip()
         while next_line.split()[1] != 'endSimulacion':
-            p_time.append(next_line.split()[0])
-            p_action.append(next_line.split()[1])
-            p_pid.append(next_line.split()[2])
-            try: p_prio.append(next_line.split()[4])
-            except IndexError: p_prio.append('')
+
+            # Para el caso de RR
+            prio = ''
+            if scheduling == 'prioNonPreemptive': prio = next_line.split()[4]
+
+            eventos.append({
+                'Tiempo':next_line.split()[0],
+                'Accion':next_line.split()[1],
+                'PID':next_line.split()[2],
+                'Prio':prio
+            })
             next_line = f.readline().strip()
+    return eventos
 
-def RoundRobin(quantum, p_time, p_action, p_pid):
-    q=Queue()
-    for i in range(len(p_time)):
-        print(p_time[i])
+def RoundRobin(quantum, eventos):
+    for e in eventos:
+        print(e)
 
+def PriorityNotPreentive(eventos):
+    for e in eventos:
+        print(e)
 
-    print('se acabo el proceso')
-    
-
-def PriorityNotPreentive(p_time, p_action, p_pid, p_prio):
-    print('Vamos a hacer Priority Not Preentive')
-
-read_file()
-if scheduling == 'RR': RoundRobin(quantum, p_time, p_action, p_pid)
-if scheduling == 'prioNotPreentive': PriorityNotPreentive(p_time, p_action, p_pid, p_prio)
+eventos = read_file()
+if scheduling == 'RR': RoundRobin(quantum, eventos)
+if scheduling == 'prioNotPreentive': PriorityNotPreentive(eventos)
