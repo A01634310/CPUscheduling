@@ -115,10 +115,20 @@ def RoundRobin(quantum, eventos):
     print(tabulate(output_table))
 
     # Crear el specs_table con base en los diferentes benchmarks de cada proceso
+    total_turnaround = 0
+    total_espera = 0
     for p in sorted(benchmark):
-        benchmark[p][5] = benchmark[p][2] - benchmark[p][1]
+        turnaround = benchmark[p][2] - benchmark[p][1]
+        benchmark[p][5] = turnaround
+        total_turnaround += turnaround
+        total_espera += benchmark[p][4]
         specs_table.append(benchmark[p])
     print(tabulate(specs_table))
+
+    print('Turnaround promedio:', end = ' ')
+    print("%0.4f" % (total_turnaround/len(benchmark),))
+    print('Tiempo espera promedio:', end = ' ')
+    print("%0.4f" % (total_espera/len(benchmark),))
 
 
 # CPU Scheduling mediante PriorityNotPreemtive
@@ -182,14 +192,23 @@ def PriorityNotPreemtive(eventos):
             ','.join(map(str, terminados))
         ])
 
-
     print(tabulate(output_table))
 
     # Crear el specs_table con base en los diferentes benchmarks de cada proceso
+    total_turnaround = 0
+    total_espera = 0
     for p in sorted(benchmark):
-        benchmark[p][5] = benchmark[p][2] - benchmark[p][1]
+        turnaround = benchmark[p][2] - benchmark[p][1]
+        benchmark[p][5] = turnaround
+        total_turnaround += turnaround
+        total_espera += benchmark[p][4]
         specs_table.append(benchmark[p])
     print(tabulate(specs_table))
+
+    print('Turnaround promedio:', end = ' ')
+    print("%0.4f" % (total_turnaround/len(benchmark),))
+    print('Tiempo espera promedio:', end = ' ')
+    print("%0.4f" % (total_espera/len(benchmark),))
 
 
 eventos = read_file()
