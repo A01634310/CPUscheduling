@@ -27,19 +27,25 @@ def read_file():
         terminacion = int(next_line.split()[0])
     return eventos
 
-def RoundRobin(quantum, eventos, benchmark):
+def RoundRobin(quantum, eventos):
     listos = []
     bloqueados = []
     terminados = []
     cpu = { 'PID':'', 'entrada':0 }
     output_table = [['Evento','Cola de listos','CPU','Bloqueados','Terminados']]
+    specs_table = [['Proceso', 'Tiempo de llegada', 'Tiempo de terminación', 'Tiempo de CPU', 'Tiempo de espera', 'Turnaround', 'Tiempo de I/O']]
+
 
     # Primer evento
     e = eventos.pop(0)
+    benchmark = {}
     str_evento = ''
     for t in range(0,terminacion):
         str_evento = ''
         special = False
+        if cpu['PID']: benchmark[cpu['PID']][3] += 1
+        for p in listos: benchmark[p][4] += 1
+        for p in bloqueados: benchmark[p][6] += 1
 
         # Si llega algún evento
         if t == e['Tiempo']:
@@ -49,6 +55,9 @@ def RoundRobin(quantum, eventos, benchmark):
             str_evento = str_eventos.pop(0)
             if accion == 'Llega':
                 listos.insert(0, p_id)
+                benchmark[p_id] = [0 for x in range(7)]
+                benchmark[p_id][0] = p_id
+                benchmark[p_id][1] = t
             elif accion == 'Acaba':
                 terminados.append(p_id)
                 # Si se acaba el proceso actualmente ejecutándose
@@ -58,6 +67,7 @@ def RoundRobin(quantum, eventos, benchmark):
                 # Si se acaba un proceso en cola de listos
                 else:
                     listos.remove(p_id)
+                benchmark[p_id][2] = t
             elif accion == 'startI/O':
                 bloqueados.append(p_id)
                 cpu['PID'] = ''
@@ -91,14 +101,17 @@ def RoundRobin(quantum, eventos, benchmark):
                 ','.join(map(str, terminados))
             ])
 
-    return output_table
+    print(tabulate(output_table))
+
+    for p in sorted(benchmark):
+        benchmark[p][5] = benchmark[p][2] - benchmark[p][1]
+        specs_table.append(benchmark[p])
+    print(tabulate(specs_table))
 
 
 def PriorityNotPreentive(eventos):
-    for e in eventos:
-        print(e)
+    print('Wenas')
 
 eventos = read_file()
-if scheduling == 'RR': output_table = RoundRobin(quantum, eventos)
-if scheduling == 'prioNotPreentive': output_table = PriorityNotPreentive(eventos)
-print(tabulate(output_table))
+if scheduling == 'RR': RoundRobin(quantum, eventos)
+elif scheduling == 'prioNotPreentive': PriorityNotPreentive(eventos)
