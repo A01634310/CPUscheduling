@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from tabulate import tabulate
+import sys
 
 
 scheduling = ''
@@ -10,7 +11,16 @@ str_eventos = []
 
 def read_file():
     eventos = []
-    with open('example.in', 'r') as f:
+    file_to_open = 'default.in'
+    if len(sys.argv) > 1:
+        file_to_open = sys.argv[1]
+    try:
+        open(file_to_open, 'r')
+    except:
+        print('\n' + sys.argv[1] +
+              ' no encontrado. Utilizando default.in en su lugar\n')
+        file_to_open = 'default.in'
+    with open(file_to_open, 'r') as f:
         global scheduling, scheduling, terminacion, str_eventos, quantum
         scheduling = f.readline().split(None, 1)[0].strip()
         quantum = int(f.readline().split()[1].strip())
@@ -56,6 +66,7 @@ def read_file():
     return eventos
 
 
+# Insertar el proceso a la cola de listos con base en su prioridad
 def priority_insert(prioridades, listos, proceso):
     og_len = len(listos)
     for i in range(0, len(listos)):
@@ -351,8 +362,6 @@ def PriorityNotPreemtive(eventos):
         total_turnaround += turnaround
         total_espera += benchmark[p][4]
         specs_table.append(benchmark[p])
-    print(tabulate(specs_table, headers=specs_headers, tablefmt="psql"))
-
     print(tabulate(specs_table, headers=specs_headers, tablefmt="psql"))
     print('\n')
 
