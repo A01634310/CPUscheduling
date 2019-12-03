@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from tabulate import tabulate
 
 
@@ -78,7 +79,7 @@ def RoundRobin(quantum, eventos):
     output_headers = ['Evento', 'Cola de listos',
                       'CPU', 'Bloqueados', 'Terminados']
     specs_table = []
-    specs_headers = ['Proceso', 'Tiempo de llegada', 'Tiempo de terminación',
+    specs_headers = ['Proceso', 'Tiempo de llegada', 'Tiempo de terminacion',
                      'Tiempo de CPU', 'Tiempo de espera', 'Turnaround', 'Tiempo de I/O']
 
     benchmark = {}  # Aquí colocaremos la info de nuestros procesos
@@ -113,7 +114,7 @@ def RoundRobin(quantum, eventos):
                     ','.join(map(str, bloqueados)),
                     ','.join(map(str, terminados))
                 ]], headers=output_headers, tablefmt="psql"))
-                print()
+                print('\n')
 
             elif accion == 'Acaba':
                 # Verificar que el proceso no estuviera ya terminado
@@ -135,7 +136,7 @@ def RoundRobin(quantum, eventos):
                         ','.join(map(str, bloqueados)),
                         ','.join(map(str, terminados))
                     ]], headers=output_headers, tablefmt="psql"))
-                    print()
+                    print('\n')
                 else:
                     special = False
 
@@ -158,7 +159,7 @@ def RoundRobin(quantum, eventos):
                         ','.join(map(str, bloqueados)),
                         ','.join(map(str, terminados))
                     ]], headers=output_headers, tablefmt="psql"))
-                    print()
+                    print('\n')
                 else:
                     special = False
 
@@ -175,7 +176,7 @@ def RoundRobin(quantum, eventos):
                         ','.join(map(str, bloqueados)),
                         ','.join(map(str, terminados))
                     ]], headers=output_headers, tablefmt="psql"))
-                    print()
+                    print('\n')
                 else:
                     special = False
 
@@ -202,7 +203,7 @@ def RoundRobin(quantum, eventos):
                     ','.join(map(str, bloqueados)),
                     ','.join(map(str, terminados))
                 ]], headers=output_headers, tablefmt="psql"))
-                print()
+                print('\n')
             cpu['PID'] = listos.pop()
             cpu['entrada'] = t
 
@@ -217,6 +218,7 @@ def RoundRobin(quantum, eventos):
             output_table.append(row)
 
     print(tabulate(output_table, headers=output_headers, tablefmt="psql"))
+    print('\n')
 
     # Crear el specs_table con base en los diferentes benchmarks de cada proceso
     total_turnaround = 0
@@ -228,11 +230,12 @@ def RoundRobin(quantum, eventos):
         total_espera += benchmark[p][4]
         specs_table.append(benchmark[p])
     print(tabulate(specs_table, headers=specs_headers, tablefmt="psql"))
+    print('\n')
 
-    print('Turnaround promedio:', end=' ')
-    print("%0.4f" % (total_turnaround/len(benchmark),))
-    print('Tiempo espera promedio:', end=' ')
-    print("%0.4f" % (total_espera/len(benchmark),))
+    summary_table = [['%0.4f' % (
+        total_turnaround/len(benchmark),), '%0.4f' % (total_espera/len(benchmark),)]]
+    print(tabulate(summary_table, headers=[
+          'Turnaround promedio:', 'Tiempo espera promedio:'], tablefmt="psql"))
 
 
 # CPU Scheduling mediante PriorityNotPreemtive
@@ -247,7 +250,7 @@ def PriorityNotPreemtive(eventos):
     output_headers = ['Evento', 'Cola de listos',
                       'CPU', 'Bloqueados', 'Terminados']
     specs_table = []
-    specs_headers = ['Proceso', 'Tiempo de llegada', 'Tiempo de terminación',
+    specs_headers = ['Proceso', 'Tiempo de llegada', 'Tiempo de terminacion',
                      'Tiempo de CPU', 'Tiempo de espera', 'Turnaround', 'Tiempo de I/O']
 
     benchmark = {}  # Aquí colocaremos la info de nuestros procesos
@@ -333,10 +336,11 @@ def PriorityNotPreemtive(eventos):
             ','.join(map(str, terminados))
         ]
         print(tabulate([row], headers=output_headers, tablefmt="psql"))
-        print()
+        print('\n')
         output_table.append(row)
 
     print(tabulate(output_table, headers=output_headers, tablefmt="psql"))
+    print('\n')
 
     # Crear el specs_table con base en los diferentes benchmarks de cada proceso
     total_turnaround = 0
@@ -349,10 +353,13 @@ def PriorityNotPreemtive(eventos):
         specs_table.append(benchmark[p])
     print(tabulate(specs_table, headers=specs_headers, tablefmt="psql"))
 
-    print('Turnaround promedio:', end=' ')
-    print("%0.4f" % (total_turnaround/len(benchmark),))
-    print('Tiempo espera promedio:', end=' ')
-    print("%0.4f" % (total_espera/len(benchmark),))
+    print(tabulate(specs_table, headers=specs_headers, tablefmt="psql"))
+    print('\n')
+
+    summary_table = [['%0.4f' % (
+        total_turnaround/len(benchmark),), '%0.4f' % (total_espera/len(benchmark),)]]
+    print(tabulate(summary_table, headers=[
+          'Turnaround promedio:', 'Tiempo espera promedio:'], tablefmt="psql"))
 
 
 eventos = read_file()
